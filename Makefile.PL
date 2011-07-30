@@ -1,13 +1,14 @@
 use inc::Module::Install;
-name 'Variable-Expand-AnyLevel';
+name     'Variable-Expand-AnyLevel';
 all_from 'lib/Variable/Expand/AnyLevel.pm';
 
-# requires '';
+requires 'PadWalker';
+requires 'parent';
 
-tests 't/*.t';
+tests    't/*.t';
 author_tests 'xt';
 
 test_requires 'Test::More';
 auto_set_repository;
-auto_include;
+#auto_include;
 WriteAll;
