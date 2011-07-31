@@ -15,6 +15,7 @@
 ^tools/
 \.svn/
 ^[^/]+\.yaml$
+^[^/]+\.yml$
 ^[^/]+\.pl$
 ^\.shipit$
 ^\.git/
