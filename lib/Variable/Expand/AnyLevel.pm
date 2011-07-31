@@ -5,7 +5,7 @@ use warnings;
 our $VERSION = '0.01';
 our @EXPORT_OK = qw(expand_variable expand_variable_all);
 use PadWalker qw(peek_my);
-use Data::Dumper;
+use Scalar::Util qw(blessed);
 
 =head1 NAME
 
@@ -76,13 +76,12 @@ sub _do_expand_variable {
     my $walker = peek_my($peek_level + 1);
     my $value = undef;
     my $variable_gen_code = "sub {\n";
+    my %values = ();
     for my $variable_name ( keys %{ $walker } ) {
         my $sigil = substr $variable_name, 0, 1;
-        local $Data::Dumper::Terse  = 1;
-        local $Data::Dumper::Indent = 0;
-        my $value = Dumper($walker->{$variable_name});
-        next if ( !$all_flg && $value =~ /^\\bless/ ); #exclude object if $all_flg doesn't specified.
-        $variable_gen_code .= "  my $variable_name = ${sigil}{ $value };\n";
+        next if ( !$all_flg && $sigil eq '$' && blessed( ${ $walker->{$variable_name} }) ); #exclude object if $all_flg doesn't specified.
+        $values{$variable_name} = $walker->{$variable_name};
+        $variable_gen_code .= "  my $variable_name = ${sigil}{ \$values{ '$variable_name' } };\n";
     }
     if ( $all_flg ) {
         $variable_gen_code .= "  return $string;\n";
@@ -91,7 +90,7 @@ sub _do_expand_variable {
         $variable_gen_code .= "  return \"$string\";\n";
     }
     $variable_gen_code .= "}->()\n";
-    #warn $variable_gen_code;
+    #warn $variable_gen_code; use Data::Dumper; warn Dumper(\%values);
     ## no critic
     eval "\$value = $variable_gen_code";
     ## use critic
