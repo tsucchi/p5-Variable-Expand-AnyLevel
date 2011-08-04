@@ -19,25 +19,17 @@ my @array_values = (
 is( expand_variable('$array_values[0]', 0), 'AAA');
 is( expand_variable('$array_values[1]', 0), 'BBB');
 
-is( expand_variable_all('$array_values[0]', 0), 'AAA');
-is( expand_variable_all('$array_values[1]', 0), 'BBB');
-
 my %hash_value = (
     AAA => '111',
     BBB => '222',
 );
 is( expand_variable('$hash_value{AAA}', 0), '111');
 is( expand_variable('$hash_value{BBB}', 0), '222');
-is( expand_variable_all('$hash_value{AAA}', 0), '111');
-is( expand_variable_all('$hash_value{BBB}', 0), '222');
-
-
 is( expand_variable('$hash_value{$array_values[0]}', 0), '111');
-is( expand_variable_all('$hash_value{$array_values[0]}', 0), '111');
 
 my $obj = t::Obj->new();
-is( expand_variable('$obj->aaa()', 0,     { stringify => '0' }), undef);     # not expanded.
-is( expand_variable_all('$obj->aaa()', 0, { stringify => '0' }), '111'); # expanded
+is( expand_variable('$obj->aaa()', 0, { stringify => '0' }), '111');
+
 
 test_for_level();
 

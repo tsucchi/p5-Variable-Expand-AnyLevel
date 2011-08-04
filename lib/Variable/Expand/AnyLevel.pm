@@ -31,14 +31,21 @@ Variable::Expand::AnyLevel enables to expand variables which exist at any level.
 =head2 expand_variable($string, $peek_level, $options_href)
 
 Expand variable in $string which exists in $peek_level. $peek_level is same as caller().
-Object(blessed reference) is not expanded, if you wish to do so, use expand_variable_all().
 
-If $string contains no variable character, $string is colletly expanded. For example,
+If stringify option specified(it is default) $string is colletly expanded. For example,
 
   my $aa = 'aa';
   my $result = $expand_variable('$aa 123', 0);
 
 $result is expanded 'aa 123'
+
+If stringify option is set to '0', $stinrg is not expanded.
+
+  my $aa = 'aa';
+  my $result = $expand_variable('$aa 123', 0, { stringify => '0' });
+
+$result is undef.
+
 
 available options are as follows
 
@@ -49,34 +56,6 @@ stringify: stringify variable(1) or not(0). default value is 1
 sub expand_variable {
     my ($string, $peek_level, $options_href) = @_;
 
-    return _do_expand_variable($string, $peek_level+1, 0, $options_href);
-}
-
-=head2 expand_variable_all($variable, $peek_level)
-
-expand variable in $variable which exists in $peek_level. $peek_level is same as caller().
-Object(blessed reference) is also expanded.
-
-Note that first parameter is not '$string'. it's '$variable'.
-non-variable character in $variable is not expanded collectly. For example, 
-
-  my $aa = SomeObj->new();
-  my $result1 = $expand_variable('$aa->method1() 123', 0); # not expanded
-  my $result2 = $expand_variable('$aa->method1()', 0);     # expanded
-
-$result2 is expanded(if method1() is sufficiently implemented), but $result1 is not expanded.
-
-=cut
-
-sub expand_variable_all {
-    my ($string, $peek_level, $options_href) = @_;
-
-    return _do_expand_variable($string, $peek_level+1, 1, $options_href);
-}
-
-sub _do_expand_variable {
-    my ($string, $peek_level, $all_flg, $options_href) = @_;
-
     my $walker = peek_my($peek_level + 1);
     my $value = undef;
     my $variable_gen_code = "sub {\n";
@@ -85,12 +64,11 @@ sub _do_expand_variable {
     my %values = ();
     for my $variable_name ( keys %{ $walker } ) {
         my $sigil = substr $variable_name, 0, 1;
-        next if ( !$all_flg && $sigil eq '$' && blessed( ${ $walker->{$variable_name} }) ); #exclude object if $all_flg doesn't specified.
         $values{$variable_name} = $walker->{$variable_name};
         $variable_gen_code .= "  my $variable_name = ${sigil}{ \$values{ '$variable_name' } };\n";
     }
     my $stringify = defined $options_href->{stringify} ? $options_href->{stringify} : 1;
-    if ( $all_flg || !$stringify ) {
+    if ( !$stringify ) {
         $variable_gen_code .= "  return $string;\n";
     }
     else {
@@ -103,6 +81,8 @@ sub _do_expand_variable {
     ## use critic
     return $value;
 }
+
+
 
 
 1;
