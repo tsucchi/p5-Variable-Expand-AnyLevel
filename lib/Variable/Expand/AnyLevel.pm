@@ -28,7 +28,7 @@ Variable::Expand::AnyLevel enables to expand variables which exist at any level.
 
 =cut
 
-=head2 expand_variable($string, $peek_level)
+=head2 expand_variable($string, $peek_level, $options_href)
 
 Expand variable in $string which exists in $peek_level. $peek_level is same as caller().
 Object(blessed reference) is not expanded, if you wish to do so, use expand_variable_all().
@@ -40,12 +40,16 @@ If $string contains no variable character, $string is colletly expanded. For exa
 
 $result is expanded 'aa 123'
 
+available options are as follows
+
+stringify: stringify variable(1) or not(0). default value is 1
+
 =cut
 
 sub expand_variable {
-    my ($string, $peek_level) = @_;
+    my ($string, $peek_level, $options_href) = @_;
 
-    return _do_expand_variable($string, $peek_level+1, 0);
+    return _do_expand_variable($string, $peek_level+1, 0, $options_href);
 }
 
 =head2 expand_variable_all($variable, $peek_level)
@@ -65,17 +69,19 @@ $result2 is expanded(if method1() is sufficiently implemented), but $result1 is 
 =cut
 
 sub expand_variable_all {
-    my ($string, $peek_level) = @_;
+    my ($string, $peek_level, $options_href) = @_;
 
-    return _do_expand_variable($string, $peek_level+1, 1);
+    return _do_expand_variable($string, $peek_level+1, 1, $options_href);
 }
 
 sub _do_expand_variable {
-    my ($string, $peek_level, $all_flg) = @_;
+    my ($string, $peek_level, $all_flg, $options_href) = @_;
 
     my $walker = peek_my($peek_level + 1);
     my $value = undef;
     my $variable_gen_code = "sub {\n";
+    $variable_gen_code .= "  no warnings 'all';\n";
+
     my %values = ();
     for my $variable_name ( keys %{ $walker } ) {
         my $sigil = substr $variable_name, 0, 1;
@@ -83,7 +89,8 @@ sub _do_expand_variable {
         $values{$variable_name} = $walker->{$variable_name};
         $variable_gen_code .= "  my $variable_name = ${sigil}{ \$values{ '$variable_name' } };\n";
     }
-    if ( $all_flg ) {
+    my $stringify = defined $options_href->{stringify} ? $options_href->{stringify} : 1;
+    if ( $all_flg || !$stringify ) {
         $variable_gen_code .= "  return $string;\n";
     }
     else {

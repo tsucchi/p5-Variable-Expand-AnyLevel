@@ -8,7 +8,8 @@ use t::Obj;
 
 my $value = 'value';
 is( expand_variable('$value aaa', 0), 'value aaa');
-#is( expand_variable_all('$value aaa', 0), 'value aaa');
+is( expand_variable('$value aaa', 0, { stringify => 1 } ), 'value aaa');
+is( expand_variable('$value aaa', 0, { stringify => 0 } ), undef); # failed to expand(because of no stringify)
 
 
 my @array_values = (
@@ -35,8 +36,8 @@ is( expand_variable('$hash_value{$array_values[0]}', 0), '111');
 is( expand_variable_all('$hash_value{$array_values[0]}', 0), '111');
 
 my $obj = t::Obj->new();
-is( expand_variable('$obj->aaa()', 0), undef);     # not expanded.
-is( expand_variable_all('$obj->aaa()', 0), '111'); # expanded
+is( expand_variable('$obj->aaa()', 0,     { stringify => '0' }), undef);     # not expanded.
+is( expand_variable_all('$obj->aaa()', 0, { stringify => '0' }), '111'); # expanded
 
 test_for_level();
 
