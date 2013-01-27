@@ -1,4 +1,9 @@
 Revision history for Perl extension Variable::Expand::AnyLevel
+0.02    2013/01/27
+        - initial version in CPAN
+        - some POD fix
+        - remove unused dependency to Scalar::Util
+        - remove unused @EXPORT(expand_variable_all)
 
 0.01    Sat Jul 30 16:16:45 2011
         - original version

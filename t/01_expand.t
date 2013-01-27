@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 
-use Variable::Expand::AnyLevel qw(expand_variable expand_variable_all);
+use Variable::Expand::AnyLevel qw(expand_variable);
 use t::Obj;
 
 my $value = 'value';

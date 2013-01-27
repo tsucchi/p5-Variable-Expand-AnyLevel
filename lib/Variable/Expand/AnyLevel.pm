@@ -2,10 +2,9 @@ package Variable::Expand::AnyLevel;
 use parent qw(Exporter);
 use strict;
 use warnings;
-our $VERSION = '0.01';
-our @EXPORT_OK = qw(expand_variable expand_variable_all);
+our $VERSION = '0.02';
+our @EXPORT_OK = qw(expand_variable);
 use PadWalker qw(peek_my);
-use Scalar::Util qw(blessed);
 
 =head1 NAME
 
@@ -39,7 +38,7 @@ If stringify option specified(it is default) $string is colletly expanded. For e
 
 $result is expanded 'aa 123'
 
-If stringify option is set to '0', $stinrg is not expanded.
+If stringify option is set to '0', $string is not expanded.
 
   my $aa = 'aa';
   my $result = $expand_variable('$aa 123', 0, { stringify => '0' });
@@ -99,7 +98,7 @@ L<PadWalker>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2011 Takuya Tsuchida
+Copyright (c) 2011 - 2013 Takuya Tsuchida
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
