@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/tsucchi/p5-Variable-Expand-AnyLevel.svg?branch=master)](https://travis-ci.org/tsucchi/p5-Variable-Expand-AnyLevel) [![Coverage Status](https://img.shields.io/coveralls/tsucchi/p5-Variable-Expand-AnyLevel/master.svg?style=flat)](https://coveralls.io/r/tsucchi/p5-Variable-Expand-AnyLevel?branch=master)
 # NAME
 
 Variable::Expand::AnyLevel - expand variables exist at any level.
@@ -19,7 +20,7 @@ Variable::Expand::AnyLevel enables to expand variables which exist at any level.
 
 Expand variable in $string which exists in $peek\_level. $peek\_level is same as caller().
 
-If stringify option specified(it is default) $string is colletly expanded. For example,
+If stringify option specified(it is default) $string is correctly expanded. For example,
 
     my $aa = 'aa';
     my $result = $expand_variable('$aa 123', 0);
@@ -47,7 +48,7 @@ Takuya Tsuchida <tsucchi@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-Copyright (c) 2011 - 2013 Takuya Tsuchida
+Copyright (c) 2011 Takuya Tsuchida
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
