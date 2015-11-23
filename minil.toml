@@ -1,0 +1,6 @@
+name = "Variable-Expand-AnyLevel"
+# badges = ["travis"]
+authority="cpan:TSUCCHI"
+
+module_maker="ModuleBuildTiny"
+
