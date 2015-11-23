@@ -1,5 +1,5 @@
 name = "Variable-Expand-AnyLevel"
-# badges = ["travis"]
+badges = ["travis", "coveralls"]
 authority="cpan:TSUCCHI"
 
 module_maker="ModuleBuildTiny"
