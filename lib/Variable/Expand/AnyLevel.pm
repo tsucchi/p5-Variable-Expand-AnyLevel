@@ -31,7 +31,7 @@ Variable::Expand::AnyLevel enables to expand variables which exist at any level.
 
 Expand variable in $string which exists in $peek_level. $peek_level is same as caller().
 
-If stringify option specified(it is default) $string is colletly expanded. For example,
+If stringify option specified(it is default) $string is correctly expanded. For example,
 
   my $aa = 'aa';
   my $result = $expand_variable('$aa 123', 0);
