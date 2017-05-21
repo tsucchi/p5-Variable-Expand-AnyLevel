@@ -2,6 +2,8 @@ Revision history for Perl extension Variable::Expand::AnyLevel
 
 {{$NEXT}}
 
+0.04 2017-05-21T12:31:00Z
+
         - fixed for removed '.' in @INC (https://github.com/tsucchi/p5-Variable-Expand-AnyLevel/issues/1)
 
 0.03 2015-11-23T02:40:59Z
