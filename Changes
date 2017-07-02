@@ -1,6 +1,8 @@
 Revision history for Perl extension Variable::Expand::AnyLevel
 
 {{$NEXT}}
+
+0.05 2017-07-02T02:46:03Z
         - fixed for removed '.' in @INC again (using FindBin)
 		- removed xt/ (no longer used)
 
